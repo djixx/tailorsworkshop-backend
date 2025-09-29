@@ -17,6 +17,6 @@ public class CategoryEntity {
 
     private String name;
 
-    @OneToMany(mappedBy = "subtype", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CategorySubtypeEntity> categorySubtypes;
 }

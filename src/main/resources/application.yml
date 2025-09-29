@@ -1,16 +1,15 @@
 spring:
-  application:
-    name: tw-backend
-  spring:
-    datasource:
-      url: jdbc:sqlserver://localhost:1433;databaseName=tailorsWorkshop;integratedSecurity=true
-    driver-class-name: com.mysql.cj.jdbc.Driver
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;databaseName=TailorsWorkshopDB;encrypt=false;trustServerCertificate=true
+    username: djix
+    password: 88888888
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 
   jpa:
     hibernate:
-      ddl-auto: update   # create / create-drop / update / validate
-    show-sql: true
+      ddl-auto: update
+    show-sql: trueS
     properties:
       hibernate:
-        format_sql: true
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.SQLServerDialect
+

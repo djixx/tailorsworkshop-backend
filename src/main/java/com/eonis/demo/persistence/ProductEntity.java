@@ -19,10 +19,6 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private CategoryEnum category;
-
-    private SubtypeEnum subtype;
-
     private String name;
 
     private BigDecimal price;

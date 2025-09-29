@@ -16,9 +16,6 @@ public class CartItemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany
-    private String productId;
-
     private String productName;
 
     private BigDecimal unitPrice;
