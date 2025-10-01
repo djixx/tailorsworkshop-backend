@@ -1,4 +1,4 @@
-package com.eonis.demo.persistence;
+package com.eonis.demo.persistence.entity;
 
 import com.eonis.demo.persistence.enums.OrderStatus;
 import jakarta.persistence.*;

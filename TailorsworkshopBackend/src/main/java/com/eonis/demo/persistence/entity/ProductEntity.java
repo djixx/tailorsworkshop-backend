@@ -1,7 +1,5 @@
-package com.eonis.demo.persistence;
+package com.eonis.demo.persistence.entity;
 
-import com.eonis.demo.persistence.enums.CategoryEnum;
-import com.eonis.demo.persistence.enums.SubtypeEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,11 +23,8 @@ public class ProductEntity {
 
     private String description;
 
-    @OneToOne
-    @JoinColumns({
-            @JoinColumn(name = "categoryId", referencedColumnName = "categoryId"),
-            @JoinColumn(name = "subtypeId", referencedColumnName = "subtypeId")
-    })
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_subtype_id", nullable = false)
     private CategorySubtypeEntity categorySubtype;
 
     @OneToMany(mappedBy = "product")

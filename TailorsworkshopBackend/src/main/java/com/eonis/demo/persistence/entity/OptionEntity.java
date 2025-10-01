@@ -1,4 +1,4 @@
-package com.eonis.demo.persistence;
+package com.eonis.demo.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

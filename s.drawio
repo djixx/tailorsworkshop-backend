@@ -1,0 +1,70 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36" version="28.2.5">
+  <diagram name="Page-1" id="gvzTG6gVYgUDQGXNsHRS">
+    <mxGraphModel dx="1729" dy="970" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="VAYGzVGXx1xgO5HBt01X-26" value="" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#b1ddf0;strokeColor=#10739e;" vertex="1" parent="1">
+          <mxGeometry x="425" y="640" width="165" height="245" as="geometry" />
+        </mxCell>
+        <mxCell id="VAYGzVGXx1xgO5HBt01X-24" value="" style="swimlane;startSize=0;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;swimlaneFillColor=light-dark(#FFFFFF,#331A00);" vertex="1" parent="1">
+          <mxGeometry x="130" y="333" width="265" height="435" as="geometry" />
+        </mxCell>
+        <mxCell id="VAYGzVGXx1xgO5HBt01X-25" value="CORE" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="VAYGzVGXx1xgO5HBt01X-24">
+          <mxGeometry y="405" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="VAYGzVGXx1xgO5HBt01X-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="VAYGzVGXx1xgO5HBt01X-24" source="VAYGzVGXx1xgO5HBt01X-8" target="VAYGzVGXx1xgO5HBt01X-29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VAYGzVGXx1xgO5HBt01X-8" value="I Repository" style="whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" vertex="1" parent="VAYGzVGXx1xgO5HBt01X-24">
+          <mxGeometry x="60" y="165" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VAYGzVGXx1xgO5HBt01X-3" value="Service" style="whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" vertex="1" parent="VAYGzVGXx1xgO5HBt01X-24">
+          <mxGeometry x="60" y="15" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VAYGzVGXx1xgO5HBt01X-6" value="geetAll()" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="VAYGzVGXx1xgO5HBt01X-24">
+          <mxGeometry x="110" y="45" width="70" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="VAYGzVGXx1xgO5HBt01X-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="VAYGzVGXx1xgO5HBt01X-24" source="VAYGzVGXx1xgO5HBt01X-6" target="VAYGzVGXx1xgO5HBt01X-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VAYGzVGXx1xgO5HBt01X-29" value="IMPL Repository" style="whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" vertex="1" parent="VAYGzVGXx1xgO5HBt01X-24">
+          <mxGeometry x="60" y="245" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VAYGzVGXx1xgO5HBt01X-16" value="mapper" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="VAYGzVGXx1xgO5HBt01X-24">
+          <mxGeometry x="180" y="267" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="VAYGzVGXx1xgO5HBt01X-31" value="DTO" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="VAYGzVGXx1xgO5HBt01X-24">
+          <mxGeometry x="185" y="245" width="50" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="VAYGzVGXx1xgO5HBt01X-11" value="getAll()" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="VAYGzVGXx1xgO5HBt01X-24">
+          <mxGeometry x="50" y="217" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="VAYGzVGXx1xgO5HBt01X-23" value="REST" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;" vertex="1" parent="1">
+          <mxGeometry x="-30" y="130" width="260" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="VAYGzVGXx1xgO5HBt01X-1" value="CONROLLER" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" vertex="1" parent="1">
+          <mxGeometry x="-10" y="230" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="VAYGzVGXx1xgO5HBt01X-2" value="GetAll()" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="20" y="270" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="VAYGzVGXx1xgO5HBt01X-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.008;entryY=0.617;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.75;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="VAYGzVGXx1xgO5HBt01X-1" target="VAYGzVGXx1xgO5HBt01X-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VAYGzVGXx1xgO5HBt01X-14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="VAYGzVGXx1xgO5HBt01X-29" target="VAYGzVGXx1xgO5HBt01X-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VAYGzVGXx1xgO5HBt01X-13" value="JPArepository" style="whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" vertex="1" parent="1">
+          <mxGeometry x="447.5" y="750" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="VAYGzVGXx1xgO5HBt01X-28" value="Persistence" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="477.5" y="640" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="VAYGzVGXx1xgO5HBt01X-33" value="&lt;div style=&quot;color: rgb(248, 248, 242); background-color: rgb(33, 33, 33); font-family: IBMPlexMono, &amp;quot;Courier New&amp;quot;, monospace, Consolas, &amp;quot;Courier New&amp;quot;, monospace; line-height: 18px; white-space: pre;&quot;&gt;&lt;div&gt;&amp;nbsp;&lt;span style=&quot;color: rgb(220, 220, 220);&quot;&gt;{&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &lt;span style=&quot;color: rgb(156, 220, 254);&quot;&gt;&quot;name&quot;&lt;/span&gt;&lt;span style=&quot;color: rgb(220, 220, 220);&quot;&gt;:&lt;/span&gt; &lt;span style=&quot;color: rgb(206, 145, 120);&quot;&gt;&quot;Naborana Suknja&quot;&lt;/span&gt;&lt;span style=&quot;color: rgb(220, 220, 220);&quot;&gt;,&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &lt;span style=&quot;color: rgb(156, 220, 254);&quot;&gt;&quot;price&quot;&lt;/span&gt;&lt;span style=&quot;color: rgb(220, 220, 220);&quot;&gt;:&lt;/span&gt; &lt;span style=&quot;color: rgb(181, 206, 168);&quot;&gt;2800.00&lt;/span&gt;&lt;span style=&quot;color: rgb(220, 220, 220);&quot;&gt;,&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &lt;span style=&quot;color: rgb(156, 220, 254);&quot;&gt;&quot;description&quot;&lt;/span&gt;&lt;span style=&quot;color: rgb(220, 220, 220);&quot;&gt;:&lt;/span&gt; &lt;span style=&quot;color: rgb(206, 145, 120);&quot;&gt;&quot;Lepršava naborana suknja, savršena za letnje dane.&quot;&lt;/span&gt;&lt;span style=&quot;color: rgb(220, 220, 220);&quot;&gt;,&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &lt;span style=&quot;color: rgb(156, 220, 254);&quot;&gt;&quot;categorySubtypeId&quot;&lt;/span&gt;&lt;span style=&quot;color: rgb(220, 220, 220);&quot;&gt;:&lt;/span&gt; &lt;span style=&quot;color: rgb(181, 206, 168);&quot;&gt;3&lt;/span&gt;&lt;span style=&quot;color: rgb(220, 220, 220);&quot;&gt;,&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &lt;span style=&quot;color: rgb(156, 220, 254);&quot;&gt;&quot;categoryId&quot;&lt;/span&gt;&lt;span style=&quot;color: rgb(220, 220, 220);&quot;&gt;:&lt;/span&gt; &lt;span style=&quot;color: rgb(181, 206, 168);&quot;&gt;1&lt;/span&gt;&lt;span style=&quot;color: rgb(220, 220, 220);&quot;&gt;,&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &lt;span style=&quot;color: rgb(156, 220, 254);&quot;&gt;&quot;subtypeId&quot;&lt;/span&gt;&lt;span style=&quot;color: rgb(220, 220, 220);&quot;&gt;:&lt;/span&gt; &lt;span style=&quot;color: rgb(181, 206, 168);&quot;&gt;3&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&amp;nbsp; &amp;nbsp; &lt;span style=&quot;color: rgb(220, 220, 220);&quot;&gt;},&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-12.5" y="960" width="225" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

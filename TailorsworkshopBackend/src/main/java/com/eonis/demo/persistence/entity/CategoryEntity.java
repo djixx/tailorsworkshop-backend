@@ -1,4 +1,4 @@
-package com.eonis.demo.persistence;
+package com.eonis.demo.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,14 +9,14 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@Table(name = "subtypes")
-public class SubtypeEntity {
+@Table(name = "categories")
+public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
-    @OneToMany(mappedBy = "subtype", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CategorySubtypeEntity> categorySubtypes;
 }

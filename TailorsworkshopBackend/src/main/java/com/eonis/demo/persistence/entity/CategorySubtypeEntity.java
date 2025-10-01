@@ -1,8 +1,10 @@
-package com.eonis.demo.persistence;
+package com.eonis.demo.persistence.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,6 +24,6 @@ public class CategorySubtypeEntity {
     @JoinColumn(name = "subtypeId", nullable = false)
     private SubtypeEntity subtype;
 
-    @OneToOne(mappedBy = "categorySubtype", cascade = CascadeType.ALL)
-    private ProductEntity product;
+    @OneToMany(mappedBy = "categorySubtype", cascade = CascadeType.ALL)
+    private List<ProductEntity> product;
 }
