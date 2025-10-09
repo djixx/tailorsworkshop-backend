@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/categories")
-public class CategoryController {
+public class CategorySubtypeController {
 
     private final CategoryService categoryService;
     private final SubtypeService subtypeService;
@@ -25,8 +25,8 @@ public class CategoryController {
         return categoryService.getAll();
     }
 
-    @GetMapping("/{categoryId}")
-    public Subtype getAllSubtypes(@PathVariable Long categoryId) {
+    @GetMapping("/{categoryId}/subtypes")
+    public List<Subtype> getAllSubtypes(@PathVariable Long categoryId) {
         return subtypeService.get(categoryId);
     }
 }
