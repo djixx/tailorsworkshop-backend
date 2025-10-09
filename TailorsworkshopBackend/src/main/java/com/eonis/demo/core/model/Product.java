@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Product extends Model {
+    private Long id;
     private String name;
     private BigDecimal price;
     private String description;

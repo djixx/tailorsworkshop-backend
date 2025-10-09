@@ -27,29 +27,29 @@ VALUES (1, 'RED'),
 -- for length
 
 -- COLOR → RED, BLUE, GREEN, BLACK
-INSERT INTO OPTION_TYPE_CHOICE (OPTION_TYPE_ID, OPTION_ID)
+INSERT INTO OPTION_TYPE_CHOICE (OPTION_TYPE_ID, OPTION_CHOICE_ID)
 VALUES (1, 1),
-       (2, 1),
-       (3, 1),
-       (4, 1);
+       (1, 2),
+       (1, 3),
+       (1, 4);
 
 -- MATERIAL → COTTON, POLYESTER, WOOL
-INSERT INTO OPTION_TYPE_CHOICE (OPTION_TYPE_ID, OPTION_ID)
-VALUES (5, 2),
-       (6, 2),
-       (7, 2);
+INSERT INTO OPTION_TYPE_CHOICE (OPTION_TYPE_ID, OPTION_CHOICE_ID)
+VALUES (2, 5),
+       (2, 6),
+       (2, 7);
 
 -- SIZE → S, M, L, XL, XXL
-INSERT INTO OPTION_TYPE_CHOICE (OPTION_TYPE_ID, OPTION_ID)
-VALUES (8, 3),
-       (9, 3),
-       (10, 3),
-       (11, 3),
-       (12, 3);
+INSERT INTO OPTION_TYPE_CHOICE (OPTION_TYPE_ID, OPTION_CHOICE_ID)
+VALUES (3, 8),
+       (3, 9),
+       (3, 10),
+       (3, 11),
+       (3, 12);
 
 -- LENGTH → NUMBER
-INSERT INTO OPTION_TYPE_CHOICE (OPTION_TYPE_ID, OPTION_ID)
-VALUES (13, 4);
+INSERT INTO OPTION_TYPE_CHOICE (OPTION_TYPE_ID, OPTION_CHOICE_ID)
+VALUES (4, 13);
 
 INSERT INTO PRODUCTS (ID, NAME, DESCRIPTION, PRICE, CATEGORY_ID)
 VALUES (1, 'A-linija Suknja', 'Šik A-linija suknje, idealna za svakodnevne i kancelarijske prilike.', 2500.00, 1),
@@ -64,43 +64,43 @@ VALUES (1, 'A-linija Suknja', 'Šik A-linija suknje, idealna za svakodnevne i ka
 
 
 -- PRODUCT ↔ OPTION TYPE mapping
-INSERT INTO PRODUCT_OPTIONS (ID, PRODUCT_ID, OPTION_TYPE_ID)
+INSERT INTO PRODUCT_OPTIONS (PRODUCT_ID, OPTION_TYPE_ID)
 VALUES
     -- All skirts (1–3) have COLOR, MATERIAL, SIZE, LENGTH
-    (1, 1, 1),
-    (2, 1, 2),
-    (3, 1, 3),
-    (4, 1, 4),
-    (5, 2, 1),
-    (6, 2, 2),
-    (7, 2, 3),
-    (8, 2, 4),
-    (9, 3, 1),
-    (10, 3, 2),
-    (11, 3, 3),
-    (12, 3, 4),
+    (1, 1),
+    (1, 2),
+    (1, 3),
+    (1, 4),
+    (2, 1),
+    (2, 2),
+    (2, 3),
+    (2, 4),
+    (3, 1),
+    (3, 2),
+    (3, 3),
+    (3, 4),
 
     -- Bags (4–6) have COLOR, MATERIAL, LENGTH
-    (13, 4, 1),
-    (14, 4, 2),
-    (15, 4, 4),
-    (16, 5, 1),
-    (17, 5, 2),
-    (18, 5, 4),
-    (19, 6, 1),
-    (20, 6, 2),
-    (21, 6, 4),
+    (4, 1),
+    (4, 2),
+    (4, 4),
+    (5, 1),
+    (5, 2),
+    (5, 4),
+    (6, 1),
+    (6, 2),
+    (6, 4),
 
     -- Pants (7–9) have COLOR, MATERIAL, SIZE, LENGTH
-    (22, 7, 1),
-    (23, 7, 2),
-    (24, 7, 3),
-    (25, 7, 4),
-    (26, 8, 1),
-    (27, 8, 2),
-    (28, 8, 3),
-    (29, 8, 4),
-    (30, 9, 1),
-    (31, 9, 2),
-    (32, 9, 3),
-    (33, 9, 4);
+    (7, 1),
+    (7, 2),
+    (7, 3),
+    (7, 4),
+    (8, 1),
+    (8, 2),
+    (8, 3),
+    (8, 4),
+    (9, 1),
+    (9, 2),
+    (9, 3),
+    (9, 4);
