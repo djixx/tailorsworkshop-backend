@@ -9,14 +9,16 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@Table(name = "categories")
-public class CategoryEntity {
+@Table(name = "option_choice")
+public class OptionChoiceEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<CategorySubtypeEntity> categorySubtypes;
+    @ManyToMany(mappedBy = "optionChoices")
+    private Set<OptionTypeEntity> optionTypeEntities;
+
 }

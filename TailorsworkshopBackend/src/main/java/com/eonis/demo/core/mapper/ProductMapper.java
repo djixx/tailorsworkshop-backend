@@ -14,9 +14,8 @@ public class ProductMapper implements Mapper<ProductEntity, Product> {
                 input.getName(),
                 input.getPrice(),
                 input.getDescription(),
-                input.getCategorySubtype().getId(),
-                input.getCategorySubtype().getCategory().getId(),
-                input.getCategorySubtype().getSubtype().getId()
+                input.getProductCategory().getId(),
+                input.getProductCategory().getName()
         );
     }
 

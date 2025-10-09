@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -24,10 +25,18 @@ public class ProductEntity {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_subtype_id", nullable = false)
-    private CategorySubtypeEntity categorySubtype;
+    @JoinColumn(name = "category_id", nullable = false)
+    private ProductCategoryEntity productCategory;
 
     @OneToMany(mappedBy = "product")
     private List<CartItemEntity> cartItems;
+
+    @ManyToMany
+    @JoinTable(
+            name = "product_options",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "option_type_id")
+    )
+    private Set<OptionTypeEntity> optionTypes;
 
 }

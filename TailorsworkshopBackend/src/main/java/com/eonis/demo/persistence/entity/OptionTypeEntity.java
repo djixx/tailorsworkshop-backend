@@ -9,7 +9,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@Table(name = "optionTypes")
+@Table(name = "option_type")
 public class OptionTypeEntity {
 
     @Id
@@ -20,10 +20,9 @@ public class OptionTypeEntity {
 
     @ManyToMany
     @JoinTable(
-            name = "optionTypeOptions",
-            joinColumns = @JoinColumn(name = "optionTypeId"),
-            inverseJoinColumns = @JoinColumn(name = "optionId")
+            name = "option_type_choice",
+            joinColumns = @JoinColumn(name = "option_type_id"),
+            inverseJoinColumns = @JoinColumn(name = "option_choice_id")
     )
-    private Set<OptionEntity> options;
-
+    private Set<OptionChoiceEntity> optionChoices;
 }

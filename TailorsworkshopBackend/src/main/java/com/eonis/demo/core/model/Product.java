@@ -15,7 +15,6 @@ public class Product extends Model {
     private String name;
     private BigDecimal price;
     private String description;
-    private Long categorySubtypeId;
     private Long categoryId;
-    private Long subtypeId;
+    private String categoryName;
 }
