@@ -13,7 +13,8 @@ public class CartItemMapper implements Mapper<CartItemEntity, CartItem> {
         cartItem.setId(input.getId());
         cartItem.setProductName(input.getProductName());
         cartItem.setQuantity(input.getQuantity());
-        cartItem.setUnitPrice(input.getUnitPrice());
+        cartItem.setProductPrice(input.getProductPrice());
+        cartItem.setTotalPrice(input.getTotalPrice());
         cartItem.setCartId(input.getCart().getId());
         cartItem.setOptionsJson(input.getOptionsJson());
         return cartItem;

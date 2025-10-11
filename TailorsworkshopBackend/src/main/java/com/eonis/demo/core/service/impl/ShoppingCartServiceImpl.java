@@ -18,12 +18,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -60,51 +58,31 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     @Override
     @Transactional
     public ShoppingCart update(ShoppingCart cart) {
-        ShoppingCartEntity cartEntity = cartRepository.getReferenceById(cart.getId());
+        ShoppingCartEntity cartEntity = cartRepository.findById(cart.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Cart not found"));
 
-        removeMissingItems(cartEntity, cart.getItems());
-        updateQuantities(cartEntity, cart.getItems());
-
-        ShoppingCartEntity updatedCart = cartRepository.save(cartEntity);
-        return mapper.map(updatedCart);
-    }
-
-    /**
-     * Removes items from the cart that are not present in the update list.
-     *
-     * @param cartEntity the entity being updated
-     * @param items      the list of items from the DTO
-     */
-    private void removeMissingItems(ShoppingCartEntity cartEntity, List<CartItem> items) {
-        Set<Long> updatedIds = items.stream()
-                .map(CartItem::getId)
-                .collect(Collectors.toSet());
-        List<CartItemEntity> cartItems = cartEntity.getItems();
-
-        List<CartItemEntity> toRemove = cartItems.stream()
-                .filter(item -> !updatedIds.contains(item.getId()))
+        List<CartItemEntity> updatedItems = cart.getItems().stream()
+                .map(this::itemMapp)
                 .toList();
 
-        cartItems.removeAll(toRemove);
-        cartItemRepository.deleteAll(toRemove);
+        cartEntity.getItems().clear();
+        updatedItems.forEach(item -> item.setCart(cartEntity));
+        cartEntity.getItems().addAll(updatedItems);
+
+        ShoppingCartEntity updatedCart = cartRepository.save(cartEntity);
+
+        cart.setItems(itemMapper.map(updatedCart.getItems()));
+        return cart;
     }
 
-    /**
-     * Updates quantities of items that exist in both the cart and the update list.
-     *
-     * @param cartEntity the entity being updated
-     * @param items      the list of items from the DTO
-     */
-    private void updateQuantities(ShoppingCartEntity cartEntity, List<CartItem> items) {
-        Map<Long, Integer> itemQuantities = items.stream()
-                .collect(Collectors.toMap(CartItem::getId, CartItem::getQuantity));
-
-        cartEntity.getItems().forEach(savedItem -> {
-            Integer newQuantity = itemQuantities.get(savedItem.getId());
-            if (newQuantity != null) {
-                savedItem.setQuantity(newQuantity);
-            }
-        });
+    private CartItemEntity itemMapp(CartItem item) {
+        CartItemEntity savedItem = cartItemRepository.getReferenceById(item.getId());
+        int quantity = item.getQuantity();
+        BigDecimal productPrice = savedItem.getProductPrice();
+        savedItem.setQuantity(quantity);
+        savedItem.setTotalPrice(productPrice.multiply(new BigDecimal(quantity)));
+        savedItem.setOptionsJson(item.getOptionsJson());
+        return savedItem;
     }
 
     @Override

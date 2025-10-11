@@ -37,9 +37,10 @@ public class OrderServiceImpl implements OrderService {
         CartItemEntity cartItemEntity = new CartItemEntity();
         cartItemEntity.setProduct(product);
         cartItemEntity.setProductName(product.getName());
-        cartItemEntity.setUnitPrice(product.getPrice());
-        cartItemEntity.setOptionsJson(selectedChoiceMap.toString());
         cartItemEntity.setQuantity(1);
+        cartItemEntity.setProductPrice(product.getPrice());
+        cartItemEntity.setTotalPrice(product.getPrice());
+        cartItemEntity.setOptionsJson(selectedChoiceMap.toString());
         cartItemEntity.setCart(usersCart);
 
         CartItemEntity savedItem = cartItemRepository.save(cartItemEntity);

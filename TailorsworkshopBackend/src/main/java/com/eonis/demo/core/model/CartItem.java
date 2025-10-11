@@ -12,7 +12,9 @@ public class CartItem {
 
     private String productName;
 
-    private BigDecimal unitPrice;
+    private BigDecimal productPrice;
+
+    private BigDecimal totalPrice;
 
     private int quantity;
 

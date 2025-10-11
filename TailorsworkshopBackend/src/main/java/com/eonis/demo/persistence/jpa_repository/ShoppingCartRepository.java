@@ -18,7 +18,7 @@ public interface ShoppingCartRepository extends JpaRepository<ShoppingCartEntity
                     SELECT c FROM ShoppingCartEntity c
                     LEFT JOIN FETCH c.items i
                     LEFT JOIN FETCH i.product p
-                    LEFT JOIN FETCH c.createdBy u  
+                    LEFT JOIN FETCH c.createdBy u
                     WHERE u.email = :email AND c.status = :status
                     """)
     Optional<ShoppingCartEntity> findByCreatedBy_EmailAndStatusFetchAll(
