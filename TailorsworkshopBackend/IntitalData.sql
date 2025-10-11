@@ -1,3 +1,6 @@
+INSERT INTO USERS (ID, EMAIL, NAME)
+VALUES (1, 'djixx@gmail.com', 'Djixx');
+
 INSERT INTO PRODUCT_CATEGORIES (ID, NAME)
 VALUES (1, 'SKIRT'),
        (2, 'PANTS'),

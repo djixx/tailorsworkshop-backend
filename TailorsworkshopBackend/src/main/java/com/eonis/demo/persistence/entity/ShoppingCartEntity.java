@@ -1,6 +1,6 @@
 package com.eonis.demo.persistence.entity;
 
-import com.eonis.demo.persistence.enums.OrderStatus;
+import com.eonis.demo.persistence.enums.CartStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +26,7 @@ public class ShoppingCartEntity {
     private LocalDateTime reviewedOn;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private CartStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "createdBy")
@@ -35,4 +35,5 @@ public class ShoppingCartEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reviewedBy")
     private UserEntity reviewedBy;
+
 }

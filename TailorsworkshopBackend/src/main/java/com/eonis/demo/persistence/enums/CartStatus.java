@@ -1,7 +1,8 @@
 package com.eonis.demo.persistence.enums;
 
-public enum OrderStatus {
-    PENDING,
+public enum CartStatus {
+    ACTIVE,
+    SUBMITTED,
     APPROVED,
     DENIED
 }

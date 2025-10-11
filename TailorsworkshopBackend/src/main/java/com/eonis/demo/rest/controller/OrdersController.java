@@ -1,5 +1,6 @@
 package com.eonis.demo.rest.controller;
 
+import com.eonis.demo.core.model.CartItem;
 import com.eonis.demo.core.model.CreateOrder;
 import com.eonis.demo.core.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -10,22 +11,23 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/orders")
-public class OrderController {
+public class OrdersController {
 
     private final OrderService orderService;
 
     @PostMapping("/{productId}")
-    public ResponseEntity<String> makeOrder(
+    public ResponseEntity<Object> addOrderItem(
             @PathVariable Long productId,
             @RequestBody CreateOrder request
     ) {
         try {
-            orderService.save(productId, request.getSelectedChoiceMap());
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            CartItem savedItem = orderService.save(productId, request.getSelectedChoiceMap(), request.getEmail());
+            return new ResponseEntity<>(savedItem, HttpStatus.CREATED);
 
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 
         }
     }
+
 }
