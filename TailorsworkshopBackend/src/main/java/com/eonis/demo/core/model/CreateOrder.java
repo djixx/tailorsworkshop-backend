@@ -16,9 +16,10 @@ public class CreateOrder {
      * Map of OptionType name -> Map of OptionChoice ID -> selected value
      * Example:
      * {
-     * "COLOR": {1: "RED"},
-     * "SIZE": {8: "S"}
+     * key : value
+     * "COLOR": "RED",
+     * "SIZE": "S"
      * }
      */
-    private Map<String, Map<Long, String>> selectedChoiceMap;
+    private Map<String, String> selectedChoiceMap;
 }

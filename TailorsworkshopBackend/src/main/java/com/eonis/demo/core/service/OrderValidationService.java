@@ -6,5 +6,5 @@ import java.util.Map;
 import java.util.Set;
 
 public interface OrderValidationService {
-    void validate(Set<OptionTypeEntity> validOptionTypes, Map<String, Map<Long, String>> selectedChoiceMap);
+    void validate(Set<OptionTypeEntity> validOptionTypes, Map<String, String> selectedChoiceMap);
 }

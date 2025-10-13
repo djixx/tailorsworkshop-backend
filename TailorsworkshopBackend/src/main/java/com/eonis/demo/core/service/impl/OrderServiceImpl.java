@@ -26,7 +26,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderValidationService orderValidationService;
     private final CartItemRepository cartItemRepository;
 
-    public CartItem save(Long productId, Map<String, Map<Long, String>> selectedChoiceMap, String email) {
+    public CartItem save(Long productId, Map<String, String> selectedChoiceMap, String email) {
         ProductEntity product = productService.findWithOptions(productId);
         Set<OptionTypeEntity> productOptionTypes = product.getOptionTypes();
 

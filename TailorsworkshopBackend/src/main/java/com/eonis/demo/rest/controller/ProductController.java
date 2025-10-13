@@ -28,4 +28,10 @@ public class ProductController {
     public ResponseEntity<ProductDetails> get(@PathVariable Long id) {
         return ResponseEntity.ok(service.getWithDetail(id));
     }
+
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<Product>> getByCategory(@PathVariable Long categoryId) {
+        List<Product> products = service.getForCategory(categoryId);
+        return ResponseEntity.ok(products);
+    }
 }

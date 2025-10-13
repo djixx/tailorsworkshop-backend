@@ -20,4 +20,5 @@ public class ProductCategoryController {
     public List<Category> getCategories() {
         return categoryService.getAll();
     }
+
 }

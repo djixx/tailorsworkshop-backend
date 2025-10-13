@@ -10,19 +10,18 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 
-
 @Service
 public class OrderValidationServiceImpl implements OrderValidationService {
     @Override
-    public void validate(Set<OptionTypeEntity> validOptionTypes, Map<String, Map<Long, String>> selectedChoiceMap) {
+    public void validate(Set<OptionTypeEntity> validOptionTypes, Map<String, String> selectedChoiceMap) {
         Map<String, Set<String>> validOptionsMap = getValidOptionsMap(validOptionTypes);
 
-        selectedChoiceMap.forEach((optionTypeName, choices) -> {
-            if ("LENGTH".equalsIgnoreCase(optionTypeName)) {
-                validateNumberOption(choices);
+        selectedChoiceMap.forEach((selectedKey, selectedValue) -> {
+            if ("LENGTH".equalsIgnoreCase(selectedKey)) {
+                validateNumberOption(selectedValue);
 
             } else {
-                validateStandardOption(optionTypeName, choices, validOptionsMap);
+                validateStandardOption(selectedKey, selectedValue, validOptionsMap);
             }
         });
     }
@@ -37,35 +36,28 @@ public class OrderValidationServiceImpl implements OrderValidationService {
                 ));
     }
 
-    private void validateNumberOption(Map<Long, String> choices) {
-        choices.forEach((choiceId, value) -> {
-            if (value == null || value.isBlank()) {
-                throw new IllegalArgumentException("Missing numeric value for option NUMBER");
-            }
-            try {
-                Double.parseDouble(value);
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException(
-                        "Invalid numeric value '" + value + "' for option NUMBER"
-                );
-            }
-        });
+    private void validateNumberOption(String selectedChoice) {
+        try {
+            Double.parseDouble(selectedChoice);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException(
+                    "Invalid numeric value '" + selectedChoice + "' for option NUMBER"
+            );
+        }
     }
 
-    private void validateStandardOption(String optionTypeName,
-                                        Map<Long, String> choices,
+    private void validateStandardOption(String selectedKey,
+                                        String selectedValue,
                                         Map<String, Set<String>> validOptionsMap) {
-        Set<String> validChoiceValues = validOptionsMap.get(optionTypeName);
+        Set<String> validChoiceValues = validOptionsMap.get(selectedKey);
         if (validChoiceValues == null) {
-            throw new IllegalArgumentException("Invalid option type: " + optionTypeName);
+            throw new IllegalArgumentException("Invalid option type: " + selectedKey);
         }
 
-        for (String selectedValue : choices.values()) {
-            if (!validChoiceValues.contains(selectedValue)) {
-                throw new IllegalArgumentException(
-                        "Invalid choice ID " + selectedValue + " for option type " + optionTypeName
-                );
-            }
+        if (!validChoiceValues.contains(selectedValue)) {
+            throw new IllegalArgumentException(
+                    "Invalid choice ID " + selectedValue + " for option type " + selectedKey
+            );
         }
     }
 }

@@ -12,6 +12,8 @@ public interface ProductService {
     ProductDetails getWithDetail(Long id);
 
     ProductEntity findWithOptions(Long productId);
+
+    List<Product> getForCategory(Long categoryId);
 }
 
 

@@ -5,5 +5,5 @@ import com.eonis.demo.core.model.CartItem;
 import java.util.Map;
 
 public interface OrderService {
-    CartItem save(Long productId, Map<String, Map<Long, String>> selectedChoiceMap, String email);
+    CartItem save(Long productId, Map<String, String> selectedChoiceMap, String email);
 }

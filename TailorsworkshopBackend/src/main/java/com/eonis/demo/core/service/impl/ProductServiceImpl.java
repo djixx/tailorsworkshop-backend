@@ -57,4 +57,10 @@ public class ProductServiceImpl implements ProductService {
     public ProductEntity findWithOptions(Long productId) {
         return repository.findWithOptions(productId);
     }
+
+    @Override
+    public List<Product> getForCategory(Long categoryId) {
+        List<ProductEntity> products = repository.findAllByProductCategory_id(categoryId);
+        return mapper.map(products);
+    }
 }
