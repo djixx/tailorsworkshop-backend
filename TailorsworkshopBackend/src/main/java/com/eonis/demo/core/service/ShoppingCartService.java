@@ -9,11 +9,7 @@ import java.util.List;
 
 public interface ShoppingCartService {
 
-    ShoppingCart getCartByEmail(String email);
-
     ShoppingCartEntity getOrCreateActiveCart(String email);
-
-    ShoppingCart update(ShoppingCart cart);
 
     void submitForReview(ShoppingCart cart);
 
@@ -22,4 +18,8 @@ public interface ShoppingCartService {
     List<ShoppingCart> getAll(CartStatus status);
 
     ShoppingCart getCartById(Long id);
+
+    void save(ShoppingCartEntity cart);
+
+    ShoppingCart getCartForUser();
 }

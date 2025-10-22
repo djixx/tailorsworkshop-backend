@@ -1,4 +1,4 @@
-package com.eonis.demo.core.service.impl;
+package com.eonis.demo.core.service;
 
 
 import com.eonis.demo.persistence.entity.UserEntity;

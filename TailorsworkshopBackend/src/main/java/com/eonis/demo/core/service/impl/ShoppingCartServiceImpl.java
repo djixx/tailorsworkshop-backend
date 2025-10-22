@@ -6,7 +6,7 @@ import com.eonis.demo.core.model.CartItem;
 import com.eonis.demo.core.model.ReviewCart;
 import com.eonis.demo.core.model.ShoppingCart;
 import com.eonis.demo.core.service.ShoppingCartService;
-import com.eonis.demo.persistence.entity.CartItemEntity;
+import com.eonis.demo.core.service.UserHelper;
 import com.eonis.demo.persistence.entity.ShoppingCartEntity;
 import com.eonis.demo.persistence.entity.UserEntity;
 import com.eonis.demo.persistence.enums.CartStatus;
@@ -14,11 +14,9 @@ import com.eonis.demo.persistence.jpa_repository.CartItemRepository;
 import com.eonis.demo.persistence.jpa_repository.ShoppingCartRepository;
 import com.eonis.demo.persistence.jpa_repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -31,58 +29,21 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartMapper mapper;
     private final UserRepository userRepository;
     private final ShoppingCartRepository cartRepository;
-    private final CartItemRepository cartItemRepository;
-
-    @Override
-    public ShoppingCart getCartByEmail(String email) {
-        ShoppingCartEntity cartEntity = getExistingCartWithDetails(email);
-        ShoppingCart cart = mapper.map(cartEntity);
-
-        List<CartItem> items = itemMapper.map(cartEntity.getItems());
-        cart.setItems(items);
-        return cart;
-    }
 
     @Override
     public ShoppingCartEntity getOrCreateActiveCart(String email) {
         return getCart(email);
     }
 
-    /**
-     * Updates the shopping cart: sets quantities for existing items,
-     * removes items not present in the update list, and persists changes.
-     *
-     * @param cart the DTO containing updated items
-     * @return the updated ShoppingCart DTO
-     */
     @Override
-    @Transactional
-    public ShoppingCart update(ShoppingCart cart) {
-        ShoppingCartEntity cartEntity = cartRepository.findById(cart.getId())
-                .orElseThrow(() -> new EntityNotFoundException("Cart not found"));
+    public ShoppingCart getCartForUser() {
+        String email = UserHelper.getLoggedInUserEmail();
+        ShoppingCartEntity cartEntity = getExistingCartWithDetails(email);
+        ShoppingCart cart = mapper.map(cartEntity);
 
-        List<CartItemEntity> updatedItems = cart.getItems().stream()
-                .map(this::itemMapp)
-                .toList();
-
-        cartEntity.getItems().clear();
-        updatedItems.forEach(item -> item.setCart(cartEntity));
-        cartEntity.getItems().addAll(updatedItems);
-
-        ShoppingCartEntity updatedCart = cartRepository.save(cartEntity);
-
-        cart.setItems(itemMapper.map(updatedCart.getItems()));
+        List<CartItem> items = itemMapper.map(cartEntity.getItems());
+        cart.setItems(items);
         return cart;
-    }
-
-    private CartItemEntity itemMapp(CartItem item) {
-        CartItemEntity savedItem = cartItemRepository.getReferenceById(item.getId());
-        int quantity = item.getQuantity();
-        BigDecimal productPrice = savedItem.getProductPrice();
-        savedItem.setQuantity(quantity);
-        savedItem.setTotalPrice(productPrice.multiply(new BigDecimal(quantity)));
-        savedItem.setOptionsJson(item.getOptionsJson());
-        return savedItem;
     }
 
     @Override
@@ -127,6 +88,11 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         cart.setItems(itemMapper.map(entity.getItems()));
 
         return cart;
+    }
+
+    @Override
+    public void save(ShoppingCartEntity cart) {
+        cartRepository.save(cart);
     }
 
     /**

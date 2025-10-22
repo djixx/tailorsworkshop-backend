@@ -2,9 +2,11 @@ package com.eonis.demo.core.service.impl;
 
 import com.eonis.demo.core.mapper.CartItemMapper;
 import com.eonis.demo.core.model.CartItem;
+import com.eonis.demo.core.model.CreateOrder;
 import com.eonis.demo.core.service.OrderService;
 import com.eonis.demo.core.service.OrderValidationService;
 import com.eonis.demo.core.service.ShoppingCartService;
+import com.eonis.demo.core.service.UserHelper;
 import com.eonis.demo.persistence.entity.CartItemEntity;
 import com.eonis.demo.persistence.entity.OptionTypeEntity;
 import com.eonis.demo.persistence.entity.ProductEntity;
@@ -17,6 +19,7 @@ import io.jsonwebtoken.io.SerializationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Set;
 
@@ -51,6 +54,40 @@ public class OrderServiceImpl implements OrderService {
         } catch (JsonProcessingException e) {
             throw new SerializationException("Error serializing JSON");
 
+        }
+    }
+
+    @Override
+    public CartItem update(Long itemId, CreateOrder request) {
+        try {
+            CartItemEntity item = cartItemRepository.getReferenceById(itemId);
+
+            item.setQuantity(request.getQuantity());
+            item.setOptionsJson(objectMapper.writeValueAsString(request.getSelectedChoiceMap()));
+            item.setTotalPrice(item.getProductPrice().multiply(BigDecimal.valueOf(request.getQuantity())));
+            CartItemEntity savedItem = cartItemRepository.save(item);
+
+            ShoppingCartEntity usersCart = cartService.getOrCreateActiveCart(UserHelper.getLoggedInUserEmail());
+
+            updateCart(usersCart);
+
+            return cartItemMapper.map(savedItem);
+        } catch (JsonProcessingException e) {
+            throw new SerializationException("Error serializing JSON");
+        }
+    }
+
+    private void updateCart(ShoppingCartEntity cart) {
+        try {
+            BigDecimal total = cart.getItems().stream()
+                    .map(CartItemEntity::getTotalPrice)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            cart.setTotalPrice(total);
+            cartService.save(cart);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to save cart: " + e.getMessage());
         }
     }
 

@@ -20,4 +20,6 @@ public class CreateOrder {
      * }
      */
     private Map<String, String> selectedChoiceMap;
+
+    private int quantity;
 }

@@ -37,17 +37,15 @@ public class ShoppingCartController {
 
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
         }
     }
 
     @PutMapping("/update/{itemId}")
     public ResponseEntity<Object> updateOrderItem(
             @PathVariable Long itemId,
-            @RequestBody CreateOrder request
-    ) {
+            @RequestBody CreateOrder request) {
         try {
-            CartItem savedItem = orderService.save(itemId, request.getSelectedChoiceMap());
+            CartItem savedItem = orderService.update(itemId, request);
             return new ResponseEntity<>(savedItem, HttpStatus.CREATED);
 
         } catch (Exception e) {
@@ -56,30 +54,14 @@ public class ShoppingCartController {
         }
     }
 
-    @GetMapping("/{email}")
-    public ResponseEntity<Object> getShoppingCart(@PathVariable String email) {
+    @GetMapping
+    public ResponseEntity<Object> getShoppingCart() {
         try {
-            ShoppingCart cart = shoppingCartService.getCartByEmail(email);
+            ShoppingCart cart = shoppingCartService.getCartForUser();
             return ResponseEntity.ok(cart);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("message", "Nema aktivne korpe za korisnika: " + email));
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @PostMapping("/update/{email}")
-    public ResponseEntity<Object> updateShoppingCart(@PathVariable String email, @RequestBody ShoppingCart cart) {
-        ResponseEntity<Object> validationResponse = validateRequestUser(email, cart);
-        if (validationResponse != null) {
-            return validationResponse;
-        }
-
-        try {
-            ShoppingCart updatedCart = shoppingCartService.update(cart);
-            return ResponseEntity.ok(updatedCart);
-
+                    .body(Map.of("message", "Nema aktivne korpe za korisnika "));
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
