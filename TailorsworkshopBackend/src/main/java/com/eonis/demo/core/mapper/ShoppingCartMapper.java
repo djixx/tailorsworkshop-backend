@@ -16,6 +16,7 @@ public class ShoppingCartMapper implements Mapper<ShoppingCartEntity, ShoppingCa
         shoppingCart.setCreatedOn(input.getCreatedOn());
         shoppingCart.setCreatedBy(input.getCreatedBy() != null ? input.getCreatedBy().getEmail() : null);
         shoppingCart.setStatus(input.getStatus());
+        shoppingCart.setTotalPrice(input.getTotalPrice());
 
         return shoppingCart;
     }

@@ -41,6 +41,21 @@ public class ShoppingCartController {
         }
     }
 
+    @PutMapping("/update/{itemId}")
+    public ResponseEntity<Object> updateOrderItem(
+            @PathVariable Long itemId,
+            @RequestBody CreateOrder request
+    ) {
+        try {
+            CartItem savedItem = orderService.save(itemId, request.getSelectedChoiceMap());
+            return new ResponseEntity<>(savedItem, HttpStatus.CREATED);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        }
+    }
+
     @GetMapping("/{email}")
     public ResponseEntity<Object> getShoppingCart(@PathVariable String email) {
         try {

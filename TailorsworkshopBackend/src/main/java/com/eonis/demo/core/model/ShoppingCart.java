@@ -4,6 +4,7 @@ import com.eonis.demo.persistence.enums.CartStatus;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,4 +24,6 @@ public class ShoppingCart {
     private CartStatus status;
 
     private List<CartItem> items;
+
+    private BigDecimal totalPrice;
 }

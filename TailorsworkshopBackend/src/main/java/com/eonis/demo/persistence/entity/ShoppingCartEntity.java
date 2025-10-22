@@ -2,10 +2,10 @@ package com.eonis.demo.persistence.entity;
 
 import com.eonis.demo.persistence.enums.CartStatus;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,6 +28,8 @@ public class ShoppingCartEntity {
 
     @Enumerated(EnumType.STRING)
     private CartStatus status;
+
+    private BigDecimal totalPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "createdBy")
