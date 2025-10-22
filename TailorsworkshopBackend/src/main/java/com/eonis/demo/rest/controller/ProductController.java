@@ -7,6 +7,7 @@ import com.eonis.demo.core.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -33,10 +34,13 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
-    @PostMapping
-    public ResponseEntity<Product> create(@RequestBody NewProduct newProduct) {
+    @PostMapping(consumes = {"multipart/form-data"})
+    public ResponseEntity<Product> create(@RequestPart NewProduct newProduct,
+                                          @RequestPart(value = "image", required = false)
+                                          MultipartFile imageFile) {
         try {
-            Product product = service.save(newProduct);
+
+            Product product = service.save(newProduct, imageFile);
             return ResponseEntity.ok(product);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();

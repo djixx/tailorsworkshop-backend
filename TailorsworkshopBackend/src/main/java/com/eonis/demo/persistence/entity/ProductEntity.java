@@ -49,4 +49,9 @@ public class ProductEntity {
     )
     private Set<OptionTypeEntity> optionTypes;
 
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "image_id", nullable = false)
+    private ImageEntity image;
+
 }

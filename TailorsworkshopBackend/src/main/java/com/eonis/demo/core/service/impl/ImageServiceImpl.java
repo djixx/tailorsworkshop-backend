@@ -16,11 +16,12 @@ public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository;
 
     @Override
-    public void save(MultipartFile file) throws IOException {
+    public ImageEntity save(MultipartFile file) throws IOException {
         ImageEntity image = new ImageEntity();
         image.setName(file.getOriginalFilename());
         image.setContent(file.getBytes());
 
         imageRepository.save(image);
+        return image;
     }
 }
