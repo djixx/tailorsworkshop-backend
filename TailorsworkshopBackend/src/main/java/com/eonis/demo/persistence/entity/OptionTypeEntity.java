@@ -1,6 +1,7 @@
 package com.eonis.demo.persistence.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,8 @@ public class OptionTypeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Name is required")
+    @Column(unique = true)
     private String name;
 
     @ManyToMany

@@ -7,6 +7,7 @@ import com.eonis.demo.core.model.ShoppingCart;
 import com.eonis.demo.core.service.OrderService;
 import com.eonis.demo.core.service.ShoppingCartService;
 import com.eonis.demo.persistence.enums.CartStatus;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +46,9 @@ public class ShoppingCartController {
         try {
             ShoppingCart cart = shoppingCartService.getCartByEmail(email);
             return ResponseEntity.ok(cart);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "Nema aktivne korpe za korisnika: " + email));
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -67,23 +71,20 @@ public class ShoppingCartController {
     }
 
     @PostMapping("/submit/{email}")
-    public ResponseEntity<Object> submitCart(@PathVariable String email, ShoppingCart cart) {
-        ResponseEntity<Object> validationResponse = validateRequestUser(email, cart);
-        if (validationResponse != null) {
-            return validationResponse;
-        }
-
+    public ResponseEntity<Object> submitCart(@PathVariable String email) {
         try {
+            ShoppingCart cart = shoppingCartService.getCartByEmail(email);
+            if (cart == null) {
+                return new ResponseEntity<>("Cart not found for user: " + email, HttpStatus.NOT_FOUND);
+            }
             shoppingCartService.submitForReview(cart);
-            return ResponseEntity.ok("Cart submitted successfully");
-
+            return ResponseEntity.ok("Cart submitted successfully for user: " + email);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-
     }
 
-    private ResponseEntity<Object> validateRequestUser(@PathVariable String email, ShoppingCart cart) {
+    private ResponseEntity<Object> validateRequestUser(String email, ShoppingCart cart) {
         if (!Objects.equals(email, cart.getCreatedBy())) {
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
@@ -115,4 +116,11 @@ public class ShoppingCartController {
                     .body(Map.of("error", e.getMessage()));
         }
     }
+
+    @GetMapping("/id/{id}")
+    public ResponseEntity<ShoppingCart> getCartById(@PathVariable Long id) {
+        ShoppingCart cart = shoppingCartService.getCartById(id);
+        return ResponseEntity.ok(cart);
+    }
+
 }

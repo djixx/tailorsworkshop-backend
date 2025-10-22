@@ -27,7 +27,9 @@ public class OrderServiceImpl implements OrderService {
     private final CartItemRepository cartItemRepository;
 
     public CartItem save(Long productId, Map<String, String> selectedChoiceMap, String email) {
-        ProductEntity product = productService.findWithOptions(productId);
+        ProductEntity product = productService.findWithOptions(productId);//vrati veliku mapu, product withOptions je sa svim opcijama kad nije selektovano,
+        //ja od prodact optios isto pravim mapui saljem te opcije i sta je selektovano da bi validirala da li je ono sto je selektovano dozvoleno
+        //  u bazi imam sta je dozvoljeno i validiram taj request , ako je
         Set<OptionTypeEntity> productOptionTypes = product.getOptionTypes();
 
         orderValidationService.validate(productOptionTypes, selectedChoiceMap);

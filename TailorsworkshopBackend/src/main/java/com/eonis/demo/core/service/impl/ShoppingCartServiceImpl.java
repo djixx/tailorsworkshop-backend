@@ -12,7 +12,7 @@ import com.eonis.demo.persistence.entity.UserEntity;
 import com.eonis.demo.persistence.enums.CartStatus;
 import com.eonis.demo.persistence.jpa_repository.CartItemRepository;
 import com.eonis.demo.persistence.jpa_repository.ShoppingCartRepository;
-import com.eonis.demo.persistence.jpa_repository.UsersRepository;
+import com.eonis.demo.persistence.jpa_repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -29,13 +29,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     private final CartItemMapper itemMapper;
     private final ShoppingCartMapper mapper;
-    private final UsersRepository usersRepository;
+    private final UserRepository userRepository;
     private final ShoppingCartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
 
     @Override
     public ShoppingCart getCartByEmail(String email) {
-        ShoppingCartEntity cartEntity = getCartWithDetails(email);
+        ShoppingCartEntity cartEntity = getExistingCartWithDetails(email);
         ShoppingCart cart = mapper.map(cartEntity);
 
         List<CartItem> items = itemMapper.map(cartEntity.getItems());
@@ -94,7 +94,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public ShoppingCart review(ReviewCart reviewCart) {
-        UserEntity reviewer = usersRepository.findByEmail(reviewCart.getReviewerEmail());
+        UserEntity reviewer = userRepository.findByEmail(reviewCart.getReviewerEmail())
+                .orElseThrow(() -> new EntityNotFoundException("Reviewer not found"));
 
         ShoppingCartEntity cartEntity = cartRepository.getReferenceById(reviewCart.getCartId());
         cartEntity.setStatus(reviewCart.getStatus());
@@ -104,6 +105,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ShoppingCartEntity savedCart = cartRepository.save(cartEntity);
         return mapper.map(savedCart);
     }
+
 
     @Override
     public List<ShoppingCart> getAll(CartStatus status) {
@@ -116,6 +118,17 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return mapper.map(carts);
     }
 
+    @Override
+    public ShoppingCart getCartById(Long id) {
+        ShoppingCartEntity entity = cartRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Cart not found"));
+
+        ShoppingCart cart = mapper.map(entity);
+        cart.setItems(itemMapper.map(entity.getItems()));
+
+        return cart;
+    }
+
     /**
      * Returns the active cart for a user with all related details fetched.
      * Creates a new one if none exists.
@@ -126,6 +139,18 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private ShoppingCartEntity getCartWithDetails(String email) {
         Optional<ShoppingCartEntity> cartDetails = cartRepository.findByCreatedBy_EmailAndStatusFetchAll(email, CartStatus.ACTIVE);
         return cartDetails.orElseGet(() -> createNewCart(email));
+    }
+
+    /**
+     * Returns the active cart for a user with all details,
+     * but does NOT create a new one if none exists.
+     *
+     * @param email user's email
+     * @return existing cart or throws EntityNotFoundException
+     */
+    private ShoppingCartEntity getExistingCartWithDetails(String email) {
+        return cartRepository.findByCreatedBy_EmailAndStatusFetchAll(email, CartStatus.ACTIVE)
+                .orElseThrow(() -> new EntityNotFoundException("No active cart found for user: " + email));
     }
 
     /**
@@ -150,7 +175,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
      * @throws EntityNotFoundException if user is not found
      */
     private ShoppingCartEntity createNewCart(String email) {
-        UserEntity user = Optional.ofNullable(usersRepository.findByEmail(email))
+        UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
         ShoppingCartEntity newCart = new ShoppingCartEntity();
@@ -160,4 +185,5 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         return cartRepository.save(newCart);
     }
+
 }

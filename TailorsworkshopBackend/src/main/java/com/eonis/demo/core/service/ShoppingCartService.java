@@ -20,4 +20,6 @@ public interface ShoppingCartService {
     ShoppingCart review(ReviewCart reviewCart);
 
     List<ShoppingCart> getAll(CartStatus status);
+
+    ShoppingCart getCartById(Long id);
 }
