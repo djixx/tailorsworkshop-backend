@@ -9,8 +9,6 @@ import java.util.Map;
 @Setter
 public class CreateOrder {
 
-    private String email;
-
     private Long productId;
     /**
      * Map of OptionType name -> Map of OptionChoice ID -> selected value

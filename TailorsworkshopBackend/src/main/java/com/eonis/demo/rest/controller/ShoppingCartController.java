@@ -32,7 +32,7 @@ public class ShoppingCartController {
             @RequestBody CreateOrder request
     ) {
         try {
-            CartItem savedItem = orderService.save(productId, request.getSelectedChoiceMap(), request.getEmail());
+            CartItem savedItem = orderService.save(productId, request.getSelectedChoiceMap());
             return new ResponseEntity<>(savedItem, HttpStatus.CREATED);
 
         } catch (Exception e) {

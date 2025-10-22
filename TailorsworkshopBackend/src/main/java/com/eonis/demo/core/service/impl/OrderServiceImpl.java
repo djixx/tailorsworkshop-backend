@@ -10,6 +10,10 @@ import com.eonis.demo.persistence.entity.OptionTypeEntity;
 import com.eonis.demo.persistence.entity.ProductEntity;
 import com.eonis.demo.persistence.entity.ShoppingCartEntity;
 import com.eonis.demo.persistence.jpa_repository.CartItemRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.io.SerializationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,34 +24,75 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
+    private final ObjectMapper objectMapper;
     private final CartItemMapper cartItemMapper;
     private final ShoppingCartService cartService;
     private final ProductServiceImpl productService;
     private final OrderValidationService orderValidationService;
     private final CartItemRepository cartItemRepository;
 
-    public CartItem save(Long productId, Map<String, String> selectedChoiceMap, String email) {
-        ProductEntity product = productService.findWithOptions(productId);//vrati veliku mapu, product withOptions je sa svim opcijama kad nije selektovano,
-        //ja od prodact optios isto pravim mapui saljem te opcije i sta je selektovano da bi validirala da li je ono sto je selektovano dozvoleno
-        //  u bazi imam sta je dozvoljeno i validiram taj request , ako je
+    /**
+     * vrati veliku mapu, product withOptions je sa svim opcijama kad nije selektovano,
+     * ja od prodact optios isto pravim mapui saljem te opcije i sta je selektovano da bi validirala da li je ono sto je selektovano dozvoleno
+     * u bazi imam sta je dozvoljeno i validiram taj request , ako je
+     */
+    public CartItem save(Long productId, Map<String, String> selectedChoiceMap) {
+        ProductEntity product = productService.findWithOptions(productId);
         Set<OptionTypeEntity> productOptionTypes = product.getOptionTypes();
 
         orderValidationService.validate(productOptionTypes, selectedChoiceMap);
 
-        ShoppingCartEntity usersCart = cartService.getOrCreateActiveCart(email);
+        ShoppingCartEntity usersCart = cartService.getOrCreateActiveCart(UserHelper.getLoggedInUserEmail());
+        CartItemEntity item = findInCart(usersCart, productId, selectedChoiceMap);
 
-        CartItemEntity cartItemEntity = new CartItemEntity();
-        cartItemEntity.setProduct(product);
-        cartItemEntity.setProductName(product.getName());
-        cartItemEntity.setQuantity(1);
-        cartItemEntity.setProductPrice(product.getPrice());
-        cartItemEntity.setTotalPrice(product.getPrice());
-        cartItemEntity.setOptionsJson(selectedChoiceMap.toString());
-        cartItemEntity.setCart(usersCart);
+        try {
+            return saveItem(selectedChoiceMap, item, product, usersCart);
 
-        CartItemEntity savedItem = cartItemRepository.save(cartItemEntity);
+        } catch (JsonProcessingException e) {
+            throw new SerializationException("Error serializing JSON");
+
+        }
+    }
+
+    private CartItem saveItem(Map<String, String> selectedChoiceMap, CartItemEntity item, ProductEntity product,
+                              ShoppingCartEntity usersCart) throws JsonProcessingException {
+        if (item != null) {
+            item.setQuantity(item.getQuantity() + 1);
+            item.setTotalPrice(item.getTotalPrice().add(product.getPrice()));
+
+        } else {
+            item = new CartItemEntity();
+            item.setProduct(product);
+            item.setProductName(product.getName());
+            item.setQuantity(1);
+            item.setProductPrice(product.getPrice());
+            item.setTotalPrice(product.getPrice());
+            item.setOptionsJson(objectMapper.writeValueAsString(selectedChoiceMap));
+            item.setCart(usersCart);
+        }
+
+        CartItemEntity savedItem = cartItemRepository.save(item);
         return cartItemMapper.map(savedItem);
     }
 
+    private CartItemEntity findInCart(ShoppingCartEntity usersCart, Long productId, Map<String, String> selectedChoiceMap) {
+        if (usersCart.getItems() == null || usersCart.getItems().isEmpty()) return null;
 
+        return usersCart.getItems().stream()
+                .filter(item -> {
+                    if (!item.getProduct().getId().equals(productId)) return false;
+
+                    try {
+                        Map<String, String> existingMap = objectMapper.readValue(item.getOptionsJson(),
+                                new TypeReference<>() {
+                                });
+
+                        return existingMap.equals(selectedChoiceMap);
+                    } catch (JsonProcessingException e) {
+                        return false;
+                    }
+                })
+                .findFirst()
+                .orElse(null);
+    }
 }

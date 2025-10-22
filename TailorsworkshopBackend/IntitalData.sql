@@ -1,3 +1,9 @@
+INSERT INTO users(ID, FIRSTNAME, LASTNAME, EMAIL, PASSWORD, ROLE)
+VALUES (1, 'Admin', 'Adminic', 'admin@gmail.com', '$2a$10$AMUwKxdqfjWa0HeztDmC7OuJHAEBHMqcb5M1LXLZ30lnCjerrwqfK',
+        'ADMIN'),
+       (2, 'Andjela', 'User', 'andjela@gmail.com', '$2a$10$AMUwKxdqfjWa0HeztDmC7OuJHAEBHMqcb5M1LXLZ30lnCjerrwqfK',
+        'USER'); -- PWD admin123
+
 INSERT INTO PRODUCT_CATEGORIES (ID, NAME)
 VALUES (1, 'SKIRT'),
        (2, 'PANTS'),
