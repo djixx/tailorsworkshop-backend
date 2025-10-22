@@ -1,8 +1,8 @@
 package com.eonis.demo.rest.controller;
 
 import com.eonis.demo.core.model.CartItem;
-import com.eonis.demo.core.model.CreateOrder;
 import com.eonis.demo.core.model.ReviewCart;
+import com.eonis.demo.core.model.SaveOrder;
 import com.eonis.demo.core.model.ShoppingCart;
 import com.eonis.demo.core.service.OrderService;
 import com.eonis.demo.core.service.ShoppingCartService;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,7 +28,7 @@ public class ShoppingCartController {
     @PostMapping("/add/{productId}")
     public ResponseEntity<Object> addOrderItem(
             @PathVariable Long productId,
-            @RequestBody CreateOrder request
+            @RequestBody SaveOrder request
     ) {
         try {
             CartItem savedItem = orderService.save(productId, request.getSelectedChoiceMap());
@@ -43,15 +42,34 @@ public class ShoppingCartController {
     @PutMapping("/update/{itemId}")
     public ResponseEntity<Object> updateOrderItem(
             @PathVariable Long itemId,
-            @RequestBody CreateOrder request) {
+            @RequestBody SaveOrder request) {
         try {
-            CartItem savedItem = orderService.update(itemId, request);
-            return new ResponseEntity<>(savedItem, HttpStatus.CREATED);
+            orderService.update(itemId, request);
+            return new ResponseEntity<>(HttpStatus.CREATED);
 
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 
         }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<Object> getAll(@RequestParam(value = "status", required = false) CartStatus status) {
+        try {
+            List<ShoppingCart> cartList = shoppingCartService.getAll(status);
+            return ResponseEntity.ok(cartList);
+
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ShoppingCart> getCartById(@PathVariable Long id) {
+        ShoppingCart cart = shoppingCartService.getCartById(id);
+        return ResponseEntity.ok(cart);
     }
 
     @GetMapping
@@ -67,27 +85,18 @@ public class ShoppingCartController {
         }
     }
 
-    @PostMapping("/submit/{email}")
-    public ResponseEntity<Object> submitCart(@PathVariable String email) {
+    @PostMapping("/submit")
+    public ResponseEntity<Object> submitCart() {
         try {
-            ShoppingCart cart = shoppingCartService.getCartByEmail(email);
+            ShoppingCart cart = shoppingCartService.getCartForUser();
             if (cart == null) {
-                return new ResponseEntity<>("Cart not found for user: " + email, HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>("Cart not found for user ", HttpStatus.NOT_FOUND);
             }
             shoppingCartService.submitForReview(cart);
-            return ResponseEntity.ok("Cart submitted successfully for user: " + email);
+            return ResponseEntity.ok("Cart submitted successfully for user");
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }
-
-    private ResponseEntity<Object> validateRequestUser(String email, ShoppingCart cart) {
-        if (!Objects.equals(email, cart.getCreatedBy())) {
-            return ResponseEntity
-                    .status(HttpStatus.FORBIDDEN)
-                    .body(Map.of("error", "You are not authorized to update this shopping cart."));
-        }
-        return null;
     }
 
     @PostMapping("/review")
@@ -99,25 +108,6 @@ public class ShoppingCartController {
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }
-
-    @GetMapping
-    public ResponseEntity<Object> getAll(@RequestParam(value = "status", required = false) CartStatus status) {
-        try {
-            List<ShoppingCart> cartList = shoppingCartService.getAll(status);
-            return ResponseEntity.ok(cartList);
-
-        } catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("error", e.getMessage()));
-        }
-    }
-
-    @GetMapping("/id/{id}")
-    public ResponseEntity<ShoppingCart> getCartById(@PathVariable Long id) {
-        ShoppingCart cart = shoppingCartService.getCartById(id);
-        return ResponseEntity.ok(cart);
     }
 
 }

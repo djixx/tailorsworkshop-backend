@@ -2,7 +2,7 @@ package com.eonis.demo.core.service.impl;
 
 import com.eonis.demo.core.mapper.CartItemMapper;
 import com.eonis.demo.core.model.CartItem;
-import com.eonis.demo.core.model.CreateOrder;
+import com.eonis.demo.core.model.SaveOrder;
 import com.eonis.demo.core.service.OrderService;
 import com.eonis.demo.core.service.OrderValidationService;
 import com.eonis.demo.core.service.ShoppingCartService;
@@ -58,22 +58,28 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public CartItem update(Long itemId, CreateOrder request) {
+    public void update(Long itemId, SaveOrder request) {
         try {
             CartItemEntity item = cartItemRepository.getReferenceById(itemId);
+            Boolean shouldDelete = request.getDelete();
 
-            item.setQuantity(request.getQuantity());
-            item.setOptionsJson(objectMapper.writeValueAsString(request.getSelectedChoiceMap()));
-            item.setTotalPrice(item.getProductPrice().multiply(BigDecimal.valueOf(request.getQuantity())));
-            CartItemEntity savedItem = cartItemRepository.save(item);
+            if (Boolean.TRUE.equals(shouldDelete)) {
+                cartItemRepository.delete(item);
+
+            } else {
+                item.setQuantity(request.getQuantity());
+                item.setOptionsJson(objectMapper.writeValueAsString(request.getSelectedChoiceMap()));
+                item.setTotalPrice(item.getProductPrice().multiply(BigDecimal.valueOf(request.getQuantity())));
+                cartItemRepository.save(item);
+
+            }
 
             ShoppingCartEntity usersCart = cartService.getOrCreateActiveCart(UserHelper.getLoggedInUserEmail());
-
             updateCart(usersCart);
 
-            return cartItemMapper.map(savedItem);
         } catch (JsonProcessingException e) {
             throw new SerializationException("Error serializing JSON");
+
         }
     }
 

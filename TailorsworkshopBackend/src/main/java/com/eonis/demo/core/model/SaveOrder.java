@@ -7,9 +7,11 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class CreateOrder {
+public class SaveOrder {
 
     private Long productId;
+
+    private Boolean delete;
     /**
      * Map of OptionType name -> Map of OptionChoice ID -> selected value
      * Example:
