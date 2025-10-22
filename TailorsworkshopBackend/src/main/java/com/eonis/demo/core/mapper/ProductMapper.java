@@ -10,6 +10,7 @@ import java.util.List;
 public class ProductMapper implements Mapper<ProductEntity, Product> {
     @Override
     public Product map(ProductEntity input) {
+        if (input == null) return null;
         return new Product(
                 input.getId(),
                 input.getName(),
