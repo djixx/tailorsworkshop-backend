@@ -21,7 +21,7 @@ public class CategoryController {
         return categoryService.getAll();
     }
 
-    @GetMapping
+    @GetMapping("/options")
     public CreateProductData getOptionTypes() {
         List<Category> categories = categoryService.getAll();
         List<OptionType> optionTypes = optionTypeService.getAll();

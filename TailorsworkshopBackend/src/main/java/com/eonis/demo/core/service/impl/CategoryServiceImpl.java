@@ -22,4 +22,9 @@ public class CategoryServiceImpl implements CategoryService {
         List<ProductCategoryEntity> all = productCategoryRepository.findAll();
         return categoryMapper.map(all);
     }
+
+    @Override
+    public ProductCategoryEntity get(Long categoryId) {
+        return productCategoryRepository.getReferenceById(categoryId);
+    }
 }

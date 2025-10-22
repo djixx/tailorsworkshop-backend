@@ -4,18 +4,17 @@ import com.eonis.demo.core.mapper.ProductMapper;
 import com.eonis.demo.core.model.NewProduct;
 import com.eonis.demo.core.model.Product;
 import com.eonis.demo.core.model.ProductDetails;
+import com.eonis.demo.core.service.CategoryService;
 import com.eonis.demo.core.service.ImageService;
 import com.eonis.demo.core.service.OptionTypeService;
 import com.eonis.demo.core.service.ProductService;
-import com.eonis.demo.persistence.entity.ImageEntity;
-import com.eonis.demo.persistence.entity.OptionChoiceEntity;
-import com.eonis.demo.persistence.entity.OptionTypeEntity;
-import com.eonis.demo.persistence.entity.ProductEntity;
+import com.eonis.demo.persistence.entity.*;
 import com.eonis.demo.persistence.jpa_repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +28,7 @@ public class ProductServiceImpl implements ProductService {
     private final ImageService imageService;
     private final ProductRepository repository;
     private final OptionTypeService optionTypeService;
+    private final CategoryService categoryService;
 
     public List<Product> getAll() {
         List<ProductEntity> entities = repository.findAll();
@@ -73,29 +73,34 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product save(NewProduct newProduct, MultipartFile imageFile) {
-
-        try {
-            ImageEntity image = null;
-            if (imageFile != null && !imageFile.isEmpty()) {
-                image = imageService.save(imageFile);
-            }
-
-            ProductEntity product = new ProductEntity();
-            product.setName(newProduct.getName());
-            product.setPrice(newProduct.getPrice());
-            product.setDescription(newProduct.getDescription());
-
-            Set<OptionTypeEntity> types = new HashSet<>(optionTypeService.findAllById(newProduct.getOptionTypes()));
-            product.setOptionTypes(types);
-            if (image != null) {
-                product.setImage(image);
-            }
-
-            return mapper.map(product);
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+    public Product save(NewProduct newProduct, MultipartFile imageFile) throws IOException {
+        ImageEntity image = null;
+        if (imageFile != null && !imageFile.isEmpty()) {
+            image = imageService.save(imageFile);
         }
+
+        Long categoryId = newProduct.getCategoryId();
+        ProductCategoryEntity categoryEntity = categoryService.get(categoryId);
+
+        if (categoryEntity == null) {
+            throw new IllegalArgumentException("Invalid category ID ");
+        }
+
+        ProductEntity product = new ProductEntity();
+        product.setName(newProduct.getName());
+        product.setPrice(newProduct.getPrice());
+        product.setDescription(newProduct.getDescription());
+        product.setProductCategory(categoryEntity);
+
+        List<OptionTypeEntity> optionTypes = optionTypeService.findAllById(newProduct.getOptionTypes());
+        Set<OptionTypeEntity> types = optionTypes != null ? new HashSet<>(optionTypes) : new HashSet<>();
+        product.setOptionTypes(types);
+
+        if (image != null) {
+            product.setImage(image);
+        }
+
+        ProductEntity savedProduct = repository.save(product);
+        return mapper.map(savedProduct);
     }
 }

@@ -6,6 +6,7 @@ import com.eonis.demo.core.model.ProductDetails;
 import com.eonis.demo.persistence.entity.ProductEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface ProductService {
@@ -17,7 +18,7 @@ public interface ProductService {
 
     List<Product> getForCategory(Long categoryId);
 
-    Product save(NewProduct newProduct, MultipartFile imageFile);
+    Product save(NewProduct newProduct, MultipartFile imageFile) throws IOException;
 }
 
 
